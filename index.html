@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IAGen Tour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="L'IAGen Tour : une journée de formation à l'IA générative, co-construite avec chaque école de l'Institut Mines-Télécom.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,400..900&display=swap">
+<style>
+/* Mise en page : une « feuille de route » de tour. Bandeau d'encre en ouverture, puis sections claires
+   rythmées par un itinéraire d'étapes (pins et tracé pointillé repris du logo). Charte Institut Mines-Télécom :
+   Bleu IMT, noir, blanc, gris. */
+:root {
+  --imt: #00B4D5;          /* Bleu IMT : aplats, pins, filets */
+  --imt-text: #00748C;     /* Bleu IMT assombri pour le texte sur fond clair (contraste AA) */
+  --ink: #0A1124;          /* encre : bandeaux sombres (noir teinté de bleu) */
+  --ink-fg: #F3F8FA;
+  --ink-muted: #A9BAC8;
+  --bg: #FFFFFF;
+  --surface: #F2F5F7;      /* Gris clair IMT, légèrement bleuté */
+  --fg: #0D1320;
+  --muted: #4A5666;
+  --line: #D6DEE5;
+  --font-display: "Archivo", "Arial Black", Arial, Helvetica, sans-serif;
+  --font-body: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(1.9rem, 4vw, 2.6rem);
+  --step-4: clamp(2.5rem, 7vw, 4.6rem);
+  --wrap: 72rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --imt-text: #3FD0EC; --ink: #050913; --ink-fg: #EEF5F8; --ink-muted: #96A8B8;
+    --bg: #0B1120; --surface: #121B2D; --fg: #E9F0F4; --muted: #9CABBA; --line: #24324A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --imt-text: #3FD0EC; --ink: #050913; --ink-fg: #EEF5F8; --ink-muted: #96A8B8;
+  --bg: #0B1120; --surface: #121B2D; --fg: #E9F0F4; --muted: #9CABBA; --line: #24324A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: var(--step-0); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ink); }
+.wrap {
+  max-width: var(--wrap); margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+a { color: var(--imt-text); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--imt); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.08; }
+p { margin: 0; }
+.eyebrow {
+  font-family: var(--font-display); font-weight: 700; font-size: var(--step--1);
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--imt-text);
+}
+
+/* En-tête */
+.site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--ink); color: var(--ink-fg);
+  border-bottom: 1px solid rgba(0, 180, 213, 0.35);
+}
+.site-header .wrap { display: flex; align-items: center; gap: 1rem; padding-block: 0.6rem; }
+.brand { display: flex; align-items: center; gap: 0.6rem; color: inherit; text-decoration: none; flex: none; }
+.brand img { width: 40px; height: 40px; border-radius: 50%; background: #fff; }
+.brand span { font-family: var(--font-display); font-weight: 900; font-style: italic; font-size: 1.15rem; letter-spacing: 0.01em; }
+.nav { display: flex; gap: 0.25rem 1.1rem; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; min-width: 0; }
+.nav a { color: var(--ink-muted); text-decoration: none; font-size: var(--step--1); font-weight: 700; padding-block: 0.3rem; }
+.nav a:hover { color: var(--ink-fg); }
+@media (max-width: 760px) { .nav { display: none; } }
+
+/* Ouverture */
+.hero { background: var(--ink); color: var(--ink-fg); overflow: hidden; position: relative; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; padding-block: 3.5rem 3rem; }
+@media (max-width: 820px) { .hero .wrap { grid-template-columns: minmax(0, 1fr); padding-block: 2.5rem 2.5rem; } }
+.hero .eyebrow { color: var(--imt); }
+.hero h1 {
+  font-size: var(--step-4); font-weight: 900; font-style: italic; text-transform: uppercase;
+  font-stretch: 92%; letter-spacing: -0.01em; margin-block: 0.9rem 1.2rem; position: relative;
+}
+.hero h1 .accent { color: var(--imt); display: block; }
+/* traits de vitesse, repris du logo */
+.speed { position: relative; padding-left: 0; }
+.speed::before {
+  content: ""; position: absolute; right: 100%; top: 18%; width: 60vw; height: 64%; margin-right: 0.6rem;
+  background: repeating-linear-gradient(to bottom, var(--imt) 0 3px, transparent 3px 14px);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 85%);
+  mask-image: linear-gradient(to right, transparent, #000 85%);
+  opacity: 0.7;
+}
+.hero .lede { color: var(--ink-muted); font-size: var(--step-1); max-width: 34rem; line-height: 1.5; }
+.hero .lede strong { color: var(--ink-fg); font-weight: 700; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.8rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.2rem; border-radius: 999px;
+  font-family: var(--font-display); font-weight: 800; font-size: var(--step-0); text-decoration: none;
+  border: 2px solid var(--imt); cursor: pointer;
+}
+.btn-primary { background: var(--imt); color: #04121A; }
+.btn-ghost { background: transparent; color: var(--ink-fg); }
+.btn-primary:hover { background: #33C6E0; }
+.btn-ghost:hover { background: rgba(0, 180, 213, 0.15); }
+.hero-visual { justify-self: center; position: relative; width: min(100%, 380px); }
+.hero-visual img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 50%; background: #fff; box-shadow: 0 0 0 10px rgba(0, 180, 213, 0.12), 0 0 0 22px rgba(0, 180, 213, 0.06); }
+.figures { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: rgba(0, 180, 213, 0.3); border-top: 1px solid rgba(0, 180, 213, 0.3); }
+.figures > div { background: var(--ink); padding: 1.1rem 1rem 1.3rem; }
+.figures b { display: block; font-family: var(--font-display); font-weight: 900; font-style: italic; font-size: var(--step-3); color: var(--imt); line-height: 1; font-variant-numeric: tabular-nums; }
+.figures span { display: block; margin-top: 0.4rem; color: var(--ink-muted); font-size: var(--step--1); line-height: 1.35; }
+@media (max-width: 640px) { .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Sections */
+section { scroll-margin-top: 4.5rem; }
+.section { padding-block: 4.5rem; }
+.section.alt { background: var(--surface); }
+.section-head { display: grid; gap: 0.8rem; max-width: 46rem; margin-bottom: 2.4rem; }
+.section-head h2 { font-size: var(--step-3); font-weight: 850; }
+.section-head p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
+
+/* Pourquoi */
+.why { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+@media (max-width: 820px) { .why { grid-template-columns: minmax(0, 1fr); gap: 2rem; } }
+.why .prose { display: grid; gap: 1rem; font-size: 1.075rem; max-width: 36rem; }
+.why .prose .quote { font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: var(--step-2); line-height: 1.2; border-left: 4px solid var(--imt); padding-left: 1rem; }
+.goals { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.goals li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.8rem; padding-block: 0.95rem; border-bottom: 1px solid var(--line); }
+.goals .n { font-family: var(--font-display); font-weight: 900; font-style: italic; color: var(--imt-text); font-size: 1.3rem; line-height: 1.2; }
+
+/* Une journée en trois temps */
+.day { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--bg); }
+@media (max-width: 860px) { .day { grid-template-columns: minmax(0, 1fr); } }
+.time { padding: 1.6rem 1.5rem 1.8rem; display: grid; gap: 0.7rem; align-content: start; position: relative; }
+.time + .time { border-left: 1px solid var(--line); }
+@media (max-width: 860px) { .time + .time { border-left: 0; border-top: 1px solid var(--line); } }
+.time .when { font-size: var(--step--1); color: var(--muted); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.time h3 { font-size: 2.1rem; font-weight: 900; font-style: italic; text-transform: uppercase; }
+.time h3 small { display: block; font-size: var(--step-0); font-style: normal; font-weight: 700; text-transform: none; color: var(--imt-text); margin-top: 0.3rem; letter-spacing: 0; }
+.time ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; color: var(--fg); }
+.time li::marker { color: var(--imt); }
+.time .num { position: absolute; top: 1.2rem; right: 1.3rem; font-family: var(--font-display); font-weight: 900; font-size: 3.2rem; line-height: 1; color: var(--imt); opacity: 0.25; font-style: italic; }
+
+/* Échelle */
+.scale-block { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 3rem; margin-top: 4rem; align-items: start; }
+@media (max-width: 820px) { .scale-block { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; } }
+.scale-block h3 { font-size: var(--step-2); font-weight: 850; margin-top: 0.6rem; }
+.scale-block p { color: var(--muted); margin-top: 0.8rem; max-width: 30rem; }
+.scale { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.scale li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); align-items: stretch; }
+.scale .lvl {
+  display: grid; place-items: center; font-family: var(--font-display); font-weight: 900; font-style: italic;
+  background: var(--imt); color: #04121A; border-radius: 8px 0 0 8px; font-variant-numeric: tabular-nums;
+}
+.scale .txt { background: var(--bg); border: 1px solid var(--line); border-left: 0; border-radius: 0 8px 8px 0; padding: 0.6rem 0.9rem; }
+.section.alt .scale .txt { background: var(--bg); }
+.scale li:nth-child(1) .lvl { opacity: 0.45; } .scale li:nth-child(2) .lvl { opacity: 0.52; }
+.scale li:nth-child(3) .lvl { opacity: 0.6; }  .scale li:nth-child(4) .lvl { opacity: 0.68; }
+.scale li:nth-child(5) .lvl { opacity: 0.76; } .scale li:nth-child(6) .lvl { opacity: 0.84; }
+.scale li:nth-child(7) .lvl { opacity: 0.92; }
+
+/* Bandeau photo */
+.photo-band { position: relative; background: var(--ink); }
+.photo-band img { display: block; width: 100%; height: clamp(220px, 38vw, 460px); object-fit: cover; opacity: 0.88; }
+.photo-band figcaption { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(5, 9, 19, 0.85), transparent); color: #F3F8FA; }
+.photo-band figcaption .wrap { padding-block: 2.5rem 1rem; font-size: var(--step--1); }
+
+/* Ateliers */
+.workshops { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+@media (max-width: 900px) { .workshops { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .workshops { grid-template-columns: minmax(0, 1fr); } }
+.ws { background: var(--bg); padding: 1.4rem 1.4rem 1.6rem; display: grid; gap: 0.55rem; align-content: start; }
+.ws h3 { font-size: 1.2rem; font-weight: 800; }
+.ws p { color: var(--muted); }
+.tag { justify-self: start; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 999px; border: 1px solid var(--imt); color: var(--imt-text); }
+.tag.solid { background: var(--imt); color: #04121A; }
+
+/* Itinéraire */
+.route { position: relative; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.5rem; margin-bottom: 3.5rem; overflow-x: auto; }
+.route::before { content: ""; position: absolute; left: 7%; right: 7%; top: 30px; border-top: 3px dashed var(--imt); opacity: 0.8; }
+.stop { position: relative; display: grid; justify-items: center; text-align: center; gap: 0.35rem; color: inherit; text-decoration: none; padding-bottom: 0.4rem; min-width: 0; }
+.pin { width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--imt); display: grid; place-items: center; margin-top: 4px; margin-bottom: 0.6rem; box-shadow: 0 0 0 5px var(--bg); }
+.section.alt .pin { box-shadow: 0 0 0 5px var(--surface); }
+.pin::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); }
+.stop.next .pin { background: var(--bg); border: 3px solid var(--imt); }
+.stop.next .pin::after { background: var(--imt); width: 9px; height: 9px; }
+.stop.open .pin { background: var(--bg); border: 3px dashed var(--muted); }
+.stop.open .pin::after { background: transparent; }
+.stop .d { font-family: var(--font-display); font-weight: 800; font-size: var(--step--1); color: var(--imt-text); font-variant-numeric: tabular-nums; }
+.stop .s { font-family: var(--font-display); font-weight: 800; line-height: 1.15; font-size: 0.98rem; }
+.stop .c { font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
+a.stop:hover .s { text-decoration: underline; text-decoration-color: var(--imt); text-underline-offset: 3px; }
+@media (max-width: 860px) {
+  .route { grid-template-columns: minmax(0, 1fr); gap: 0; overflow: visible; }
+  .route::before { left: 16px; right: auto; top: 20px; bottom: 20px; border-top: 0; border-left: 3px dashed var(--imt); }
+  .stop { grid-template-columns: 34px minmax(0, 1fr); justify-items: start; text-align: left; column-gap: 1rem; row-gap: 0.1rem; padding-block: 0.6rem; }
+  .stop .pin { grid-row: span 3; margin: 0; }
+}
+
+/* Étapes réalisées */
+.stage { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 2.5rem; padding-block: 2.8rem; border-top: 1px solid var(--line); }
+.stage:first-of-type { border-top: 0; padding-top: 0; }
+@media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); gap: 1.2rem; } }
+.stage-id { display: grid; gap: 0.4rem; align-content: start; }
+.stage-id .date { font-family: var(--font-display); font-weight: 900; font-style: italic; font-size: 1.8rem; line-height: 1.05; color: var(--imt-text); font-variant-numeric: tabular-nums; }
+.stage-id h3 { font-size: var(--step-2); font-weight: 900; }
+.stage-id .where { color: var(--muted); font-size: var(--step--1); }
+.stage-body { display: grid; gap: 1.4rem; min-width: 0; }
+.stage-body > p { font-size: 1.075rem; max-width: 46rem; }
+.halves { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; }
+@media (max-width: 640px) { .halves { grid-template-columns: minmax(0, 1fr); } }
+.halves h4 { margin: 0 0 0.5rem; font-family: var(--font-display); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--imt-text); }
+.halves ul { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.35rem; }
+.halves li::marker { color: var(--imt); }
+.campus { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.6rem; }
+@media (max-width: 760px) { .campus { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.campus div { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.8rem; background: var(--bg); }
+.campus b { display: block; font-family: var(--font-display); font-weight: 800; }
+.campus span { font-size: var(--step--1); color: var(--muted); }
+.gallery { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.6rem; }
+.gallery figure { margin: 0; min-width: 0; }
+.gallery figure:nth-child(1), .gallery figure:nth-child(2) { grid-column: span 3; }
+.gallery figure:nth-child(3), .gallery figure:nth-child(4) { grid-column: span 3; }
+.gallery img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; background: var(--surface); }
+.gallery figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+@media (max-width: 560px) { .gallery figure { grid-column: span 6 !important; } }
+.note { font-size: var(--step--1); color: var(--muted); }
+.resources { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.resources li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.7rem; align-items: baseline; padding: 0.7rem 0.9rem; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+
+/* Prochaines étapes */
+.next-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 960px) { .next-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .next-grid { grid-template-columns: minmax(0, 1fr); } }
+.next-card { border: 1px solid var(--line); border-radius: 14px; padding: 1.3rem; display: grid; gap: 0.6rem; align-content: start; background: var(--bg); }
+.next-card h3 { font-size: 1.25rem; font-weight: 850; }
+.next-card .when { font-family: var(--font-display); font-weight: 800; color: var(--imt-text); }
+.next-card p { color: var(--muted); font-size: 0.95rem; }
+.next-card.invite { background: var(--ink); color: var(--ink-fg); border-color: var(--ink); }
+.next-card.invite p { color: var(--ink-muted); }
+.next-card.invite .when { color: var(--imt); }
+
+/* Pilotage, presse */
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; }
+@media (max-width: 820px) { .cols { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; } }
+.cols h3 { font-size: var(--step-1); font-weight: 850; margin-bottom: 1rem; }
+.people { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.people li { padding-block: 0.8rem; border-bottom: 1px solid var(--line); display: grid; gap: 0.1rem; }
+.people b { font-family: var(--font-display); font-weight: 800; }
+.people span { color: var(--muted); font-size: 0.95rem; }
+.press { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
+.press li { border-left: 4px solid var(--imt); padding: 0.2rem 0 0.2rem 1rem; display: grid; gap: 0.2rem; }
+.press .src { font-size: var(--step--1); color: var(--muted); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.press a { font-weight: 700; }
+
+/* Contact */
+.contact { background: var(--ink); color: var(--ink-fg); }
+.contact .wrap { padding-block: 4rem; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+@media (max-width: 820px) { .contact .wrap { grid-template-columns: minmax(0, 1fr); } }
+.contact h2 { font-size: var(--step-3); font-weight: 900; font-style: italic; text-transform: uppercase; }
+.contact h2 span { color: var(--imt); }
+.contact p { color: var(--ink-muted); margin-top: 1rem; max-width: 36rem; font-size: 1.075rem; }
+.mail-box { border: 1px solid rgba(0, 180, 213, 0.45); border-radius: 14px; padding: 1.3rem; display: grid; gap: 0.8rem; }
+.mail-box .who { font-family: var(--font-display); font-weight: 800; font-size: var(--step-1); }
+.mail-box .role { color: var(--ink-muted); font-size: var(--step--1); line-height: 1.4; }
+.mail-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+.mail-row code { font-family: var(--font-body); font-size: 1.05rem; color: var(--imt); user-select: all; overflow-wrap: anywhere; }
+.copy { font: inherit; font-size: var(--step--1); font-weight: 700; background: transparent; color: var(--ink-fg); border: 1px solid var(--ink-muted); border-radius: 999px; padding: 0.3rem 0.8rem; cursor: pointer; }
+.copy:hover { border-color: var(--imt); }
+
+.site-footer { background: var(--ink); color: var(--ink-muted); border-top: 1px solid rgba(0, 180, 213, 0.25); font-size: var(--step--1); }
+.site-footer .wrap { padding-block: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between; }
+.site-footer a { color: var(--ink-fg); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#accueil"><img src="assets/img/logo-iagentour.jpg" alt=""><span>IAGen Tour</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#principe">Le principe</a>
+      <a href="#journee">La journée</a>
+      <a href="#ateliers">Ateliers</a>
+      <a href="#etapes">Les étapes</a>
+      <a href="#prochaines">À venir</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="accueil">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Institut Mines-Télécom · Programme IA</p>
+        <h1><span class="speed">Face à face avec l'IA,</span><span class="accent">au cœur de nos écoles</span></h1>
+        <p class="lede">L'IAGen Tour se déplace dans chaque école de l'Institut Mines-Télécom pour une <strong>journée de formation à l'IA générative</strong>, co-construite avec l'équipe pédagogique locale, pour les personnels enseignants et administratifs.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#etapes">Voir les étapes du tour</a>
+          <a class="btn btn-ghost" href="#contact">Accueillir le tour</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/img/logo-iagentour.jpg" alt="Logo IAGen Tour : carte de France avec un itinéraire entre les écoles, Institut Mines-Télécom">
+      </div>
+    </div>
+  </section>
+
+  <div style="background: var(--ink);">
+    <div class="wrap" style="padding-block: 0 2.5rem;">
+      <div class="figures" aria-label="Le tour en chiffres">
+        <div><b>3</b><span>écoles déjà visitées en 2026</span></div>
+        <div><b>6</b><span>campus et sites, de Douai à Alès</span></div>
+        <div><b>≈ 240</b><span>participantes et participants</span></div>
+        <div><b>3</b><span>écoles en préparation pour 2027</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section" id="principe">
+    <div class="wrap">
+      <div class="why">
+        <div>
+          <div class="section-head" style="margin-bottom: 1.6rem;">
+            <p class="eyebrow">Le principe</p>
+            <h2>Partir des usages, pas des outils</h2>
+          </div>
+          <div class="prose">
+            <p>Les webinaires des Jeudis de l'IA touchent un large public, mais pas tout le monde. Une partie des collègues reste à distance du format en ligne, et la rencontre en présentiel reste le meilleur déclencheur pour passer à la pratique.</p>
+            <p>L'IAGen Tour organise donc, avec la cellule pédagogique de chaque école, une journée dédiée à l'IA générative et adaptée au contexte de l'établissement. On part des situations professionnelles réelles, de ce qui est accessible tout de suite, avec une attention constante à la souveraineté des données.</p>
+            <p class="quote">Ouvrir, partager, s'outiller : une trame commune, une journée propre à chaque école.</p>
+          </div>
+        </div>
+        <ol class="goals" aria-label="Objectifs">
+          <li><span class="n">1</span><span>Toucher les personnels peu exposés aux webinaires en ligne.</span></li>
+          <li><span class="n">2</span><span>Faire monter en compétences les cellules pédagogiques locales par la co-animation.</span></li>
+          <li><span class="n">3</span><span>Impliquer les directions pour inscrire la démarche IA dans la stratégie de l'école.</span></li>
+          <li><span class="n">4</span><span>Faire circuler les pratiques entre les écoles du réseau.</span></li>
+          <li><span class="n">5</span><span>Donner à voir ce qui est utilisable dès le lendemain.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="journee">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Le format</p>
+        <h2>Une journée en trois temps</h2>
+        <p>Chaque étape est co-construite avec l'école accueillante. La trame reste la même ; le contenu suit les publics, les métiers et les priorités de l'établissement.</p>
+      </div>
+      <div class="day">
+        <article class="time">
+          <span class="num" aria-hidden="true">1</span>
+          <p class="when">Matin</p>
+          <h3>Ouvrir<small>Conférence plénière</small></h3>
+          <ul>
+            <li>Mot d'accueil de la direction de l'école.</li>
+            <li>Conférence interactive de 1 h 30 à 2 h, avec sondages en direct (Wooclap).</li>
+            <li>Panorama de l'IA générative à partir de cas d'usage concrets : acteurs, cycle de maturité, Mistral et ILaaS, souveraineté.</li>
+            <li>Ouverte à l'ensemble des personnels.</li>
+          </ul>
+        </article>
+        <article class="time">
+          <span class="num" aria-hidden="true">2</span>
+          <p class="when">Fin de matinée</p>
+          <h3>Partager<small>Table ronde et échanges</small></h3>
+          <ul>
+            <li>Table ronde, world café ou discussion ouverte, au choix de l'école.</li>
+            <li>Retours d'expérience de collègues « ambassadeurs ».</li>
+            <li>L'école se positionne sur ce qui est possible et souhaitable.</li>
+            <li>Présence de la direction vivement souhaitée.</li>
+          </ul>
+        </article>
+        <article class="time">
+          <span class="num" aria-hidden="true">3</span>
+          <p class="when">Après-midi</p>
+          <h3>S'outiller<small>Ateliers pratiques à la carte</small></h3>
+          <ul>
+            <li>2 à 4 ateliers en parallèle, de 1 h 15 à 1 h 30, sur inscription.</li>
+            <li>Petits groupes de 10 à 25 personnes pour manipuler vraiment.</li>
+            <li>Co-animés par l'équipe IAGen Tour et l'équipe locale.</li>
+            <li>Restitution courte en plénière pour conclure.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="scale-block">
+        <div>
+          <p class="eyebrow">Pendant la conférence</p>
+          <h3>Où en êtes-vous ? Une échelle en 8 niveaux</h3>
+          <p>La salle vote en direct pour se situer. Le résultat oriente la suite de la conférence et aide chacun à choisir son atelier de l'après-midi.</p>
+        </div>
+        <ol class="scale" aria-label="Échelle des usages de l'IA générative, du niveau 1 au niveau 8">
+          <li><span class="lvl">1</span><span class="txt">Formuler des demandes simples à un assistant</span></li>
+          <li><span class="lvl">2</span><span class="txt">Recherche augmentée et synthèses sourcées</span></li>
+          <li><span class="lvl">3</span><span class="txt">Créer des images, des sons, des vidéos</span></li>
+          <li><span class="lvl">4</span><span class="txt">Structurer ses prompts avec une méthode</span></li>
+          <li><span class="lvl">5</span><span class="txt">Créer et utiliser ses propres assistants ou agents</span></li>
+          <li><span class="lvl">6</span><span class="txt">Maîtriser des outils spécialisés (voix, avatars, slides)</span></li>
+          <li><span class="lvl">7</span><span class="txt">Automatiser sans coder</span></li>
+          <li><span class="lvl">8</span><span class="txt">Développer ses applications via les API</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <figure class="photo-band" style="margin: 0;">
+    <img src="assets/img/2026-04-30_NordEurope_Ateliers.webp" alt="Participantes et participants en atelier, ordinateurs ouverts, dans une grande salle d'IMT Nord Europe" loading="lazy">
+    <figcaption><div class="wrap">Après-midi d'ateliers à IMT Nord Europe, 30 avril 2026</div></figcaption>
+  </figure>
+
+  <section class="section" id="ateliers">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Temps 3 · S'outiller</p>
+        <h2>Un catalogue d'ateliers à la carte</h2>
+        <p>L'école choisit et adapte les ateliers selon ses publics. Les plus demandés : les agents Mistral et NotebookLM.</p>
+      </div>
+      <div class="workshops">
+        <article class="ws"><span class="tag solid">Le plus demandé</span><h3>Créer ses agents Mistral</h3><p>Construire un assistant pour ses tâches quotidiennes, avec des instructions structurées. Démonstration puis pratique guidée.</p></article>
+        <article class="ws"><span class="tag solid">Le plus demandé</span><h3>Recherche augmentée et RAG avec NotebookLM</h3><p>Recherche approfondie avec plusieurs IA, puis exploration de ses propres sources et création de supports pédagogiques.</p></article>
+        <article class="ws"><span class="tag">Avancé</span><h3>Intégrer l'IA dans ses outils via les API</h3><p>Appeler un modèle depuis ses propres outils et automatiser une tâche, à partir d'une première clé d'API.</p></article>
+        <article class="ws"><span class="tag">Initiation</span><h3>Prompt engineering</h3><p>Méthodes de rédaction de prompts et construction de prompts réutilisables.</p></article>
+        <article class="ws"><span class="tag">Enseignement</span><h3>Évaluer et rédiger avec l'IA</h3><p>Grilles critériées pour les enseignantes et enseignants, comptes rendus de réunion avec ou sans IA : bons usages et limites.</p></article>
+        <article class="ws"><span class="tag">Réflexif</span><h3>World café IA</h3><p>Sans manipulation d'outils : l'école construit collectivement sa vision des usages.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="etapes">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">L'itinéraire</p>
+        <h2>Les étapes du tour</h2>
+        <p>Trois écoles visitées en 2026, d'autres en préparation pour 2027. Chaque étape a sa couleur : pédagogie et évolution des programmes, ou productivité des services.</p>
+      </div>
+
+      <nav class="route" aria-label="Itinéraire de l'IAGen Tour">
+        <a class="stop" href="#nord-europe"><span class="pin" aria-hidden="true"></span><span class="d">30.04.2026</span><span class="s">IMT Nord Europe</span><span class="c">Douai · Villeneuve-d'Ascq</span></a>
+        <a class="stop" href="#atlantique"><span class="pin" aria-hidden="true"></span><span class="d">1–4.06.2026</span><span class="s">IMT Atlantique</span><span class="c">Nantes · Rennes · Brest</span></a>
+        <a class="stop" href="#ales"><span class="pin" aria-hidden="true"></span><span class="d">02.07.2026</span><span class="s">IMT Mines Alès</span><span class="c">Alès</span></a>
+        <a class="stop next" href="#prochaines"><span class="pin" aria-hidden="true"></span><span class="d">Février 2027</span><span class="s">Télécom Paris</span><span class="c">Palaiseau</span></a>
+        <a class="stop next" href="#prochaines"><span class="pin" aria-hidden="true"></span><span class="d">2027</span><span class="s">IMT-BS et Télécom SudParis</span><span class="c">Évry</span></a>
+        <a class="stop next" href="#prochaines"><span class="pin" aria-hidden="true"></span><span class="d">2027</span><span class="s">Mines Saint-Étienne</span><span class="c">Saint-Étienne</span></a>
+        <a class="stop open" href="#contact"><span class="pin" aria-hidden="true"></span><span class="d">Calendrier ouvert</span><span class="s">Votre école</span><span class="c">Réseau IMT</span></a>
+      </nav>
+
+      <article class="stage" id="nord-europe">
+        <div class="stage-id">
+          <p class="date">30 avril 2026</p>
+          <h3>IMT Nord Europe</h3>
+          <p class="where">Journée IA en action · Douai (Bourseul) et Villeneuve-d'Ascq, reliés en visio</p>
+          <span class="tag solid" style="margin-top: 0.4rem;">Première étape</span>
+        </div>
+        <div class="stage-body">
+          <p>La première étape a réuni les deux sites de l'école. Après le mot d'accueil de la direction et de la coordinatrice du Programme IA de l'IMT, la conférence a parcouru le cycle de maturité des technologies, les acteurs de l'IA générative, ILaaS et les enjeux de souveraineté numérique.</p>
+          <div class="halves">
+            <div>
+              <h4>Matin</h4>
+              <ul>
+                <li>Conférence « Panorama des usages de l'IA générative » (Julien Morice).</li>
+                <li>Table ronde des ambassadeurs IA de l'école : agent Mistral privé, analyse automatisée de verbatims, tableaux de bord avec GitHub Copilot, ingénierie pédagogique assistée par IA.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Après-midi · 4 ateliers</h4>
+              <ul>
+                <li>Apprendre et travailler avec Mistral et NotebookLM.</li>
+                <li>Connecter une application à l'IA : votre première clé d'API.</li>
+                <li>World café d'idéation sur les usages de l'IA à l'école.</li>
+                <li>L'IA pour programmer : VS Code et GitHub Copilot.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="gallery">
+            <figure><img src="assets/img/2026-04-30_NordEurope_Conference_Julien_Morice.webp" alt="Julien Morice au pupitre devant une diapositive sur l'adoption de l'IA générative" loading="lazy"><figcaption>Conférence d'ouverture : le cycle d'adoption de l'IA générative.</figcaption></figure>
+            <figure><img src="assets/img/2026-04-30_NordEurope_Ouverture_Programme.webp" alt="Présentation du programme de la Journée IA en action devant le public" loading="lazy"><figcaption>Ouverture et programme de la matinée.</figcaption></figure>
+            <figure><img src="assets/img/2026-04-30_NordEurope_Public_Pleniere.webp" alt="Public attentif lors de la plénière" loading="lazy"><figcaption>La plénière à Douai.</figcaption></figure>
+            <figure><img src="assets/img/2026-04-30_NordEurope_Ateliers.webp" alt="Participants en atelier autour de tables avec ordinateurs" loading="lazy"><figcaption>Les ateliers de l'après-midi.</figcaption></figure>
+          </div>
+          <p class="note">Photos : Institut Mines-Télécom, <a href="https://www.imt.fr/en/the-iagen-tour-promoting-the-use-of-generative-ai-in-imt/" target="_blank" rel="noopener">article du 2 octobre 2026</a>.</p>
+        </div>
+      </article>
+
+      <article class="stage" id="atlantique">
+        <div class="stage-id">
+          <p class="date">1er au 4 juin 2026</p>
+          <h3>IMT Atlantique</h3>
+          <p class="where">Une tournée sur trois campus, la même trame chaque jour, puis un atelier avancé à distance</p>
+        </div>
+        <div class="stage-body">
+          <p>Un membre de la direction a ouvert la journée sur chaque campus. Les matinées étaient ouvertes à tous (9 h - 12 h 35), les après-midis consacrés aux ateliers selon les publics et les niveaux (14 h - 17 h 45). Objectifs : informer, sensibiliser et former l'ensemble du personnel, partager les retours d'expérience en pédagogie, et prendre du recul sur l'IA générative dans l'enseignement supérieur.</p>
+          <div class="campus">
+            <div><b>Nantes</b><span>Lundi 1er juin</span></div>
+            <div><b>Rennes</b><span>Mardi 2 juin</span></div>
+            <div><b>Brest</b><span>Mercredi 3 juin</span></div>
+            <div><b>À distance</b><span>Jeudi 4 juin, atelier avancé multi-campus</span></div>
+          </div>
+          <div class="halves">
+            <div>
+              <h4>Matin · ouverture</h4>
+              <ul>
+                <li>Introduction par la coordinatrice du Programme IA de l'IMT.</li>
+                <li>« État des lieux et panorama des usages de l'IA générative » (Julien Morice, Nantes et Brest).</li>
+                <li>« Comprendre pour mieux choisir » (Thomas Mouchoux, Université Rennes 2, Rennes).</li>
+                <li>« Coopérer pour une IA sobre et souveraine dans l'enseignement supérieur : RAGaRenn et ILaaS » (Olivier Wong, Université de Rennes, Rennes).</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Après-midi · ateliers en alternance</h4>
+              <ul>
+                <li>Créer vos agents Mistral pour vos tâches quotidiennes.</li>
+                <li>Recherche augmentée par IA et création d'un RAG avec NotebookLM.</li>
+                <li>Jeudi : « Approfondir l'IAG », atelier avancé sur des cas d'usage professionnels.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="note">Les replays des conférences de Rennes sont disponibles sous licence Creative Commons sur l'espace Moodle de l'événement. Opération soutenue par l'État dans le cadre de l'AMI « Compétences et Métiers d'Avenir » du programme France 2030, opéré par la Caisse des Dépôts.</p>
+        </div>
+      </article>
+
+      <article class="stage" id="ales">
+        <div class="stage-id">
+          <p class="date">2 juillet 2026</p>
+          <h3>IMT Mines Alès</h3>
+          <p class="where">Une journée sur un site unique</p>
+        </div>
+        <div class="stage-body">
+          <p>La matinée s'est tenue dans une salle unique : mot introductif de la direction, conférence, puis table ronde avec la direction de l'école. L'après-midi, quatre ateliers ont tourné sur deux créneaux, avec un programme ajusté aux inscriptions confirmées.</p>
+          <div class="halves">
+            <div>
+              <h4>Matin</h4>
+              <ul>
+                <li>Mot introductif de la direction.</li>
+                <li>Conférence sur les usages de l'IA générative (Julien Morice).</li>
+                <li>Table ronde avec la direction de l'école.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Après-midi · 4 ateliers</h4>
+              <ul>
+                <li>Articuler Mistral et NotebookLM pour apprendre.</li>
+                <li>Choisir, prompter et utiliser les bons outils selon ses besoins.</li>
+                <li>Transcrire, synthétiser, reformuler : gagner du temps sans perdre la main.</li>
+                <li>S'appuyer sur l'IA pour élaborer ses grilles d'évaluation critériées.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="prochaines">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">À venir</p>
+        <h2>Les prochaines étapes</h2>
+        <p>Le tour continue en 2027. Chaque nouvelle étape s'inspire des précédentes et se construit avec l'équipe de l'école.</p>
+      </div>
+      <div class="next-grid">
+        <article class="next-card">
+          <p class="when">Février 2027</p>
+          <h3>Télécom Paris</h3>
+          <p>Une journée tournée vers la pédagogie : l'IA en classe, l'évolution des programmes d'une école du numérique, apprendre avec et sans IA.</p>
+          <span class="tag">En préparation</span>
+        </article>
+        <article class="next-card">
+          <p class="when">2027</p>
+          <h3>IMT-BS et Télécom SudParis</h3>
+          <p>Une journée commune aux deux écoles du campus d'Évry, pour les équipes enseignantes : l'IA dans ses cours, l'approche par compétences, l'évaluation.</p>
+          <span class="tag">En préparation</span>
+        </article>
+        <article class="next-card">
+          <p class="when">2027</p>
+          <h3>IMT Mines Saint-Étienne</h3>
+          <p>Une édition enrichie d'interventions sur l'IA responsable et sur les précautions à prendre avec l'IA agentique dans l'enseignement supérieur et la recherche.</p>
+          <span class="tag">En cadrage</span>
+        </article>
+        <article class="next-card invite">
+          <p class="when">Calendrier ouvert</p>
+          <h3>Et votre école ?</h3>
+          <p>Toutes les écoles du réseau peuvent accueillir le tour. On fixe ensemble la date, le public et la couleur de la journée.</p>
+          <a class="btn btn-primary" href="#contact" style="justify-self: start; font-size: 0.9rem; padding: 0.55rem 1rem;">Nous contacter</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="pilotage">
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <p class="eyebrow">Qui porte le tour</p>
+          <h2 style="font-size: var(--step-3); font-weight: 850; margin: 0.8rem 0 1.6rem;">Une initiative du réseau</h2>
+          <ul class="people">
+            <li><b>Julien Morice</b><span>Responsable du service PracTice, IMT Business School · pilote de l'IAGen Tour, conférencier et animateur</span></li>
+            <li><b>Lucie Jacquet-Malo</b><span>Coordinatrice du Programme IA de l'Institut Mines-Télécom, Direction Générale</span></li>
+            <li><b>Les équipes pédagogiques des écoles</b><span>Co-construction et co-animation de chaque étape, avec enseignantes, enseignants et intervenants extérieurs</span></li>
+          </ul>
+          <p class="note" style="margin-top: 1rem;">Avec le soutien de la Direction Générale de l'Institut Mines-Télécom (Transformation éducative).</p>
+        </div>
+        <div>
+          <p class="eyebrow">Ils en parlent</p>
+          <h2 style="font-size: var(--step-3); font-weight: 850; margin: 0.8rem 0 1.6rem;">Dans la presse</h2>
+          <ul class="press">
+            <li><span class="src">Institut Mines-Télécom · 2 octobre 2026</span><a href="https://www.imt.fr/en/the-iagen-tour-promoting-the-use-of-generative-ai-in-imt/" target="_blank" rel="noopener">The IAGen Tour: Promoting the use of generative AI in IMT Technological Universities</a><span class="note">Trois étapes, quatre campus et près de 240 participants : le bilan des premières journées.</span></li>
+            <li><span class="src">AEF info · dépêche 751672</span><a href="https://www.aefinfo.fr/depeche/751672-imt-atlantique-organise-un-ia-gen-tour-pour-sensibiliser-ses-personnels-aux-defis-de-lintelligence-artificielle" target="_blank" rel="noopener">IMT Atlantique organise un IA Gen Tour pour sensibiliser ses personnels aux défis de l'intelligence artificielle</a><span class="note">Article réservé aux abonnés.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div>
+        <h2>Accueillir <span>le tour</span></h2>
+        <p>Votre école souhaite organiser son IAGen Tour ? Un premier échange suffit pour cadrer les attentes, le public, la date et le format : un site ou plusieurs campus, matinée ouverte ou non à l'extérieur, couleur pédagogique ou services.</p>
+      </div>
+      <div class="mail-box">
+        <p class="who">Julien Morice</p>
+        <p class="role">Responsable du service PracTice, ingénierie pédagogique et e-learning · IMT Business School, Direction des Formations Initiales</p>
+        <div class="mail-row">
+          <code id="mail">julien.morice@imt-bs.eu</code>
+          <button class="copy" id="copy-mail" type="button">Copier l'adresse</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>IAGen Tour · Institut Mines-Télécom · Programme IA</span>
+    <span>Institut Mines-Télécom, 37-39 rue Dareau, 75014 Paris · <a href="https://www.imt.fr" target="_blank" rel="noopener">www.imt.fr</a></span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copy-mail');
+    var mail = document.getElementById('mail');
+    btn.addEventListener('click', function () {
+      var text = mail.textContent.trim();
+      var done = function () { btn.textContent = 'Adresse copiée'; setTimeout(function () { btn.textContent = "Copier l'adresse"; }, 2000); };
+      var fallback = function () {
+        var r = document.createRange(); r.selectNodeContents(mail);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Adresse sélectionnée';
+      };
+      try {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } catch (e) { fallback(); }
+    });
+  })();
+</script>
+</body>
+</html>
